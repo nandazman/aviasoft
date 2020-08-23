@@ -22,11 +22,15 @@
 </template>
 
 <style lang="scss" scoped>
-  li.menu {
-    list-style-type: none;
-    margin-left: 1rem;
-    .active {
-      color: var(--primary-color)
+  ul {
+    overflow: hidden;
+    li.menu {
+      list-style-type: none;
+      margin-left: 1rem;
+      .active {
+        color: var(--primary-color);
+        font-weight: bold;
+      }
     }
   }
 </style>

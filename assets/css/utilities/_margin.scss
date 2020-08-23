@@ -45,3 +45,33 @@
 .ml-3 {
   margin-left: ($spacer * 2);
 }
+
+.mx-1 {
+  margin-left: ($spacer * .5);
+  margin-right: ($spacer * .5);
+}
+
+.mx-2 {
+  margin-left: ($spacer * 1);
+  margin-right: ($spacer * 1);
+}
+
+.mx-3 {
+  margin-left: ($spacer * 2);
+  margin-right: ($spacer * 2);
+}
+
+.my-1 {
+  margin-top: ($spacer * .5);
+  margin-bottom: ($spacer * .5);
+}
+
+.my-2 {
+  margin-top: ($spacer * 1);
+  margin-bottom: ($spacer * 1);
+}
+
+.my-3 {
+  margin-top: ($spacer * 2);
+  margin-bottom: ($spacer * 2);
+}
