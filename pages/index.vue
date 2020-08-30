@@ -5,7 +5,7 @@
         HOT LISTS
       </h1>
       <div class="carousel">
-        <button v-if="trendingProduct.offset !== 0" class="carousel__button carousel__button-left" @click="slideCarousel(-1)" />
+        <button class="carousel__button carousel__button-left" @click="slideCarousel(-1)" />
         <div class="carousel__container">
           <a
             v-for="(product, index) in trendingProduct.data"
@@ -24,7 +24,7 @@
             </div>
           </a>
         </div>
-        <button v-if="trendingProduct.offset !== trendingProduct.showItem" class="carousel__button carousel__button-right" @click="slideCarousel(1)" />
+        <button class="carousel__button carousel__button-right" @click="slideCarousel(1)" />
       </div>
     </section>
     <section>
@@ -51,6 +51,13 @@
 export default {
   data () {
     return {
+      carousel: {
+        maxElement: 0,
+        element: {
+          offset: 335,
+          gap: 25
+        }
+      },
       trendingProduct: {
         data: [{
           text: 'Product 1',
@@ -76,14 +83,50 @@ export default {
       }
     }
   },
+  mounted() {
+    this.getMaximumElement()
+  },
   computed: {
     carouselOffset () {
-      return (index) => {
-        const position = index - this.trendingProduct.offset
-        return {
-          left: (position) * 330 + 30 + 'px'
-          // opacity
+      return (index, element) => {
+        // console.log(this.trendingProduct.offset)
+        let { offset } = this.trendingProduct
+        if (offset < 0) this.trendingProduct.offset = 0
+        const position = index - offset
+        let space = 0
+        switch (this.carousel.maxElement) {
+          case 1:
+            this.carousel.element.offset = 340
+            this.carousel.element.gap = 40
+            if (this.trendingProduct.offset > 5) {
+              this.trendingProduct.offset = 5
+            }
+            return {
+              left: (position * this.carousel.element.offset + this.carousel.element.gap) + 'px'
+            }
+          case 2:
+            if (this.trendingProduct.offset > 4) {
+              this.trendingProduct.offset = 4
+            }
+            if (this.trendingProduct.offset === 4) {
+              space = this.$el.closest('.container').offsetWidth - (this.carousel.element.gap + 2 * this.carousel.element.offset)
+            }
+            return {
+              left: (position * this.carousel.element.offset + this.carousel.element.gap + space) + 'px'
+            }
+          default:
+            this.carousel.element.gap = 20
+            if (this.trendingProduct.offset > 3) {
+              this.trendingProduct.offset = 3
+            }
+            if (this.trendingProduct.offset === 3) {
+              space = this.$el.closest('.container').offsetWidth - (this.carousel.element.gap + 2 * this.carousel.element.offset)
+            }
+            return {
+              left: (position * this.carousel.element.offset + this.carousel.element.gap) + 'px'
+            }
         }
+
       }
     },
     carouselShow (index) {
@@ -97,7 +140,15 @@ export default {
   methods: {
     slideCarousel (move) {
       this.trendingProduct.offset += move
-      console.log(this.trendingProduct.offset)
+    },
+    getMaximumElement () {
+      const container = this.$el.querySelector('.carousel__container').clientWidth
+      this.carousel.maxElement = Math.round(container / this.carousel.element.offset)
+      if (this.carousel.maxElement < 1) this.carousel.maxElement = 1
+      console.log(this.carousel.maxElement)
+      this.$el.closest('body').onresize = () => {
+        this.getMaximumElement()
+      }
     }
   }
 }
@@ -106,7 +157,7 @@ export default {
 <style lang="scss" scoped>
   .carousel {
     margin: 0 auto;
-    max-width: 970px;
+    max-width: 1000px;
     position: relative;
     .carousel__button {
       width: 64px;
@@ -124,7 +175,7 @@ export default {
         top: 175px;
       }
       &.carousel__button-right {
-        right: 0;
+        right: -20px;
         top: 180px;
       }
     }
